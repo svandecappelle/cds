@@ -211,7 +211,7 @@
   branch = "master"
   name = "github.com/fsamin/go-repo"
   packages = ["."]
-  revision = "2b23591bd8d5c87e5cfcc9348e34b23bea7c326e"
+  revision = "f8e418ff86b7bb1f883073e8fc123864f0ed98aa"
 
 [[projects]]
   name = "github.com/fsamin/go-shredder"

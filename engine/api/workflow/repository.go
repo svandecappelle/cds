@@ -5,6 +5,8 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"path/filepath"
 	"time"
@@ -237,4 +239,34 @@ func GetRepositoryOperation(db gorp.SqlExecutor, store cache.Store, ope *sdk.Ope
 		return sdk.WrapError(err, "GetRepositoryOperation> Unable to get operation")
 	}
 	return nil
+}
+
+// PushToRepository push new cds files in the repository and should, as a result, get a new pull request on the repository
+func PushToRepository(db gorp.SqlExecutor, store cache.Store, prj sdk.Project, tr *tar.Reader, fromBranch, toBranch string) (*sdk.Operation, error) {
+	ope := new(sdk.Operation)
+	ope.Setup.PushFiles.FromBranch = "cds-workflow-as-code"
+	ope.Setup.PushFiles.ToBranch = "master"
+	ope.Setup.PushFiles.Message = "chore: workflow as code edition"
+	ope.Setup.PushFiles.Files = make(map[string][]byte)
+	for {
+		hdr, err := tr.Next()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, fmt.Errorf("Error while reading the tar archive err:%v", err)
+		}
+
+		ope.Setup.PushFiles.Files[".cds/"+hdr.Name], err = ioutil.ReadAll(tr)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	//Now post the operation
+	if err := PostRepositoryOperation(db, store, prj, ope); err != nil {
+		return nil, err
+	}
+
+	return ope, nil
 }

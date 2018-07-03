@@ -1,6 +1,8 @@
 package api
 
 import (
+	"archive/tar"
+	"bytes"
 	"context"
 	"fmt"
 	"net/http"
@@ -12,6 +14,7 @@ import (
 	"github.com/ovh/cds/engine/api/repositoriesmanager"
 	"github.com/ovh/cds/engine/api/workflow"
 	"github.com/ovh/cds/sdk"
+	"github.com/ovh/cds/sdk/exportentities"
 	"github.com/ovh/cds/sdk/log"
 )
 
@@ -33,6 +36,8 @@ func (api *API) postImportAsCodeHandler() Handler {
 		if ope.URL == "" {
 			return sdk.ErrWrongRequest
 		}
+
+		log.Debug("Starting workflow as code from %s %s", ope.VCSServer, ope.RepoFullName)
 
 		if ope.LoadFiles.Pattern == "" {
 			ope.LoadFiles.Pattern = workflow.WorkflowAsCodePattern
@@ -179,5 +184,35 @@ func (api *API) postPerformImportAsCodeHandler() Handler {
 		}
 
 		return WriteJSON(w, msgListString, http.StatusOK)
+	}
+}
+
+func (api *API) postWorkflowBecomeAsCodeHandler() Handler {
+	return func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
+		vars := mux.Vars(r)
+		key := vars["key"]
+		name := vars["permWorkflowName"]
+
+		proj, err := project.Load(api.mustDB(), api.Cache, key, getUser(ctx), project.LoadOptions.WithPlatforms)
+		if err != nil {
+			return sdk.WrapError(err, "getWorkflowPullHandler> unable to load projet")
+		}
+
+		buf := new(bytes.Buffer)
+		if err := workflow.Pull(api.mustDB(), api.Cache, proj, name, exportentities.FormatYAML, false, project.EncryptWithBuiltinKey, getUser(ctx), buf); err != nil {
+			return sdk.WrapError(err, "getWorkflowPullHandler")
+		}
+
+		tarReader := tar.NewReader(buf)
+
+		//Now post the TAR content to the repositories service
+		ope, err := workflow.PushToRepository(api.mustDB(), api.Cache, *proj, tarReader, "master", "master")
+
+		_ = key
+		_ = name
+		_ = ope
+		_ = err
+
+		return nil
 	}
 }

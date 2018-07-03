@@ -701,12 +701,6 @@ func UpdatePipelineBuildCommits(db *gorp.DbMap, store cache.Store, p *sdk.Projec
 		return nil, sdk.WrapError(errcurr, "UpdatePipelineBuildCommits> Cannot get build number and hashes (buildNumber=%d, pipelineID=%d, applicationID=%d, envID=%d)", pb.BuildNumber, pip.ID, app.ID, env.ID)
 	}
 
-	if prev == nil {
-		log.Debug("UpdatePipelineBuildCommits> No previous build was found for branch %s", cur.Branch)
-	} else {
-		log.Debug("UpdatePipelineBuildCommits> Current Build number: %d - Current Hash: %s - Previous Build number: %d - Previous Hash: %s", cur.BuildNumber, cur.Hash, prev.BuildNumber, prev.Hash)
-	}
-
 	repo := app.RepositoryFullname
 	if cur != nil && cur.Remote != "" {
 		repo = cur.Remote

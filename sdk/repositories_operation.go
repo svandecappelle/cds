@@ -22,7 +22,8 @@ type Operation struct {
 
 // OperationSetup is the setup for an operation basically its a checkout
 type OperationSetup struct {
-	Checkout OperationCheckout `json:"checkout,omitempty"`
+	Checkout  OperationCheckout  `json:"checkout"`
+	PushFiles OperationPushFiles `json:"push_files"`
 }
 
 // OperationRepositoryInfo represents global information about the repository
@@ -42,6 +43,15 @@ type OperationLoadFiles struct {
 type OperationCheckout struct {
 	Branch string `json:"branch,omitempty"`
 	Commit string `json:"commit,omitempty"`
+}
+
+// OperationPushFiles To write files on a repository, commit, push and create a new pull request
+type OperationPushFiles struct {
+	FromBranch  string            `json:"from_branch,omitempty"`
+	ToBranch    string            `json:"to_branch,omitempty"`
+	Files       map[string][]byte `json:"files,omitempty"`
+	Message     string            `json:"message,omitempty"`
+	PullRequest *VCSPullRequest   `json:"pull_request,omitempty"`
 }
 
 // OperationStatus is the status of an operation
