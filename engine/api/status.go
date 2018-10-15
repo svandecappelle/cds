@@ -14,7 +14,6 @@ import (
 	"github.com/ovh/cds/engine/api/repositoriesmanager"
 	"github.com/ovh/cds/engine/api/scheduler"
 	"github.com/ovh/cds/engine/api/services"
-	"github.com/ovh/cds/engine/api/sessionstore"
 	"github.com/ovh/cds/engine/api/worker"
 	"github.com/ovh/cds/engine/service"
 	"github.com/ovh/cds/sdk"
@@ -38,7 +37,6 @@ func (api *API) Status() sdk.MonitoringStatus {
 	m.Lines = append(m.Lines, getStatusLine(event.Status()))
 	m.Lines = append(m.Lines, getStatusLine(repositoriesmanager.EventsStatus(api.Cache)))
 	m.Lines = append(m.Lines, getStatusLine(api.Cache.Status()))
-	m.Lines = append(m.Lines, getStatusLine(sessionstore.Status))
 	m.Lines = append(m.Lines, getStatusLine(objectstore.Status()))
 	m.Lines = append(m.Lines, getStatusLine(mail.Status()))
 	m.Lines = append(m.Lines, getStatusLine(api.DBConnectionFactory.Status()))

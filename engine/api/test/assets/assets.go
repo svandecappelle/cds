@@ -67,7 +67,7 @@ func DeleteTestProject(t *testing.T, db gorp.SqlExecutor, store cache.Store, key
 // InsertAdminUser have to be used only for tests
 func InsertAdminUser(db *gorp.DbMap) (*sdk.User, string) {
 	s := sdk.RandomString(10)
-	_, hash, _ := user.GeneratePassword()
+	password, hash, _ := user.GeneratePassword()
 	u := &sdk.User{
 		Admin:    true,
 		Email:    "no-reply-" + s + "@corp.ovh.com",
@@ -80,15 +80,13 @@ func InsertAdminUser(db *gorp.DbMap) (*sdk.User, string) {
 		},
 	}
 	user.InsertUser(db, u, &u.Auth)
-
-	t, _ := user.NewPersistentSession(db, u)
-	return u, string(t)
+	return u, password
 }
 
 // InsertLambdaUser have to be used only for tests
 func InsertLambdaUser(db gorp.SqlExecutor, groups ...*sdk.Group) (*sdk.User, string) {
 	s := sdk.RandomString(10)
-	_, hash, _ := user.GeneratePassword()
+	password, hash, _ := user.GeneratePassword()
 	u := &sdk.User{
 		Admin:    false,
 		Email:    "no-reply-" + s + "@corp.ovh.com",
@@ -107,8 +105,7 @@ func InsertLambdaUser(db gorp.SqlExecutor, groups ...*sdk.Group) (*sdk.User, str
 		u.Groups = append(u.Groups, *g)
 	}
 
-	t, _ := user.NewPersistentSession(db, u)
-	return u, string(t)
+	return u, password
 }
 
 // AuthentifyRequestFromWorker have to be used only for tests
@@ -261,6 +258,26 @@ func NewAuthentifiedRequest(t *testing.T, u *sdk.User, pass, method, uri string,
 		t.FailNow()
 	}
 	AuthentifyRequest(t, req, u, pass)
+
+	return req
+}
+
+func NewRequest(t *testing.T, method, uri string, i interface{}) *http.Request {
+	var btes []byte
+	var err error
+	if i != nil {
+		btes, err = json.Marshal(i)
+		if err != nil {
+			t.Error(err)
+			t.FailNow()
+		}
+	}
+
+	req, err := http.NewRequest(method, uri, bytes.NewBuffer(btes))
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
 
 	return req
 }

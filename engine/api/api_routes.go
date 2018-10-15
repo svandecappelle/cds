@@ -29,8 +29,11 @@ func (api *API) InitRouter() {
 		dbFunc:   api.DBConnectionFactory.GetDBMap,
 		messages: make(chan sdk.Event),
 	}
-	api.eventsBroker.Init(context.Background(), api.PanicDump())
+	api.eventsBroker.Init(context.Background())
 
+	r := api.Router
+	r.Handle("/login", r.GET(api.getLoginUserHandler, Auth(false)), r.POST(api.postLoginUserHandler, Auth(false)))
+	r.Handle("/login/{driver}", r.GET(api.redirectToIdentityProvider, Auth(false)))
 	r.Handle("/request-token", r.POST(api.postRequestTokenHanler, Auth(false)))
 
 	// Action
