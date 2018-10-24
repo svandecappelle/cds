@@ -569,7 +569,7 @@ func (a *API) Serve(ctx context.Context) error {
 		Mux:        mux.NewRouter(),
 		Background: ctx,
 	}
-	a.InitRouter()
+	a.InitRouter(ctx)
 	if err := a.Router.InitStats("cds-api", a.Name); err != nil {
 		log.Error("unable to init router stats: %v", err)
 	}
