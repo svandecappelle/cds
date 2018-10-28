@@ -7,7 +7,6 @@ import (
 	"github.com/go-gorp/gorp"
 
 	"github.com/ovh/cds/sdk"
-	"github.com/ovh/cds/sdk/log"
 )
 
 type contextKey int
@@ -37,7 +36,6 @@ type RemoteAuthentifier interface {
 
 //GetDriver is a factory
 func GetDriver(c context.Context, mode string, options interface{}, DBFunc func() *gorp.DbMap) (Driver, error) {
-	log.Info("Auth> Initializing driver (%s)", mode)
 	var d Driver
 	switch mode {
 	case "ldap":

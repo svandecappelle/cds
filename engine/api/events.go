@@ -75,7 +75,6 @@ func (b *eventsBroker) cacheSubscribe(c context.Context, cacheMsgChan chan<- sdk
 		select {
 		case <-c.Done():
 			if c.Err() != nil {
-				log.Error("events.cacheSubscribe> Exiting: %v", c.Err())
 				return
 			}
 		case <-tick.C:
@@ -125,7 +124,6 @@ func (b *eventsBroker) Start(ctx context.Context, panicCallback func(s string) (
 
 			}
 			if ctx.Err() != nil {
-				log.Error("eventsBroker.Start> Exiting: %v", ctx.Err())
 				return
 			}
 
