@@ -1,0 +1,4 @@
+name: hello-deployment-plugin
+type: platform
+author: "Yvonnick Esnault"
+description: "Hello Example Deployment Plugin"
