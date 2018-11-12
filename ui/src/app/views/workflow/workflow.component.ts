@@ -111,11 +111,11 @@ export class WorkflowComponent implements OnInit {
                                 if (this.selectedNodeID) {
                                     let n = Workflow.getNodeByID(this.selectedNodeID, this.workflow);
                                     if (!n && this.selectedNodeRef) {
-                                        n = Workflow.getNodeByRef(this.selectedNodeRef, this.workflow);
+                                        n = Workflow.getNodeByName(this.selectedNodeRef, this.workflow);
                                     }
                                     if (n) {
                                         let url = this._router.createUrlTree(['./'], { relativeTo: this._activatedRoute,
-                                            queryParams: { 'node_id': n.id, 'node_ref': n.ref}});
+                                            queryParams: { 'node_id': n.id, 'node_ref': n.name}});
                                         this._router.navigateByUrl(url.toString()).then(() => {});
                                     }
                                 }

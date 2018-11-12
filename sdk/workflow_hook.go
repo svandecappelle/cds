@@ -54,7 +54,6 @@ func (w *Workflow) GetHooks() map[string]WorkflowNodeHook {
 type WorkflowNodeOutgoingHook struct {
 	ID                  int64                             `json:"id" db:"id"`
 	Name                string                            `json:"name" db:"name"`
-	Ref                 string                            `json:"ref" db:"-"`
 	WorkflowNodeID      int64                             `json:"workflow_node_id" db:"workflow_node_id"`
 	WorkflowHookModelID int64                             `json:"workflow_hook_model_id" db:"workflow_hook_model_id"`
 	WorkflowHookModel   WorkflowHookModel                 `json:"model" db:"-"`
@@ -65,7 +64,6 @@ type WorkflowNodeOutgoingHook struct {
 func (h WorkflowNodeOutgoingHook) migrate(withID bool) Node {
 	newNode := Node{
 		Name: h.Name,
-		Ref:  h.Ref,
 		Type: NodeTypeOutGoingHook,
 		OutGoingHookContext: &NodeOutGoingHook{
 			Config:      h.Config,
@@ -75,9 +73,6 @@ func (h WorkflowNodeOutgoingHook) migrate(withID bool) Node {
 	}
 	if withID {
 		newNode.ID = h.ID
-	}
-	if h.Ref == "" {
-		h.Ref = h.Name
 	}
 	for _, t := range h.Triggers {
 		child := t.WorkflowDestNode.migrate(withID)
@@ -100,15 +95,11 @@ type WorkflowNodeFork struct {
 func (f WorkflowNodeFork) migrate(withID bool) Node {
 	newNode := Node{
 		Name:     f.Name,
-		Ref:      f.Name,
 		Type:     NodeTypeFork,
 		Triggers: make([]NodeTrigger, 0, len(f.Triggers)),
 	}
 	if withID {
 		newNode.ID = f.ID
-	}
-	if newNode.Ref == "" {
-		newNode.Ref = newNode.Name
 	}
 	for _, t := range f.Triggers {
 		child := t.WorkflowDestNode.migrate(withID)

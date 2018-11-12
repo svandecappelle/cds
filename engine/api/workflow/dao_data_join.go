@@ -18,7 +18,7 @@ func insertNodeJoinData(db gorp.SqlExecutor, w *sdk.Workflow, n *sdk.Node) error
 
 	for i := range n.JoinContext {
 		j := &n.JoinContext[i]
-		foundRef := w.WorkflowData.NodeByRef(j.ParentName)
+		foundRef := w.WorkflowData.NodeByName(j.ParentName)
 		if foundRef == nil {
 			return sdk.WrapError(sdk.ErrWorkflowNodeRef, "insertNodeJoinData> Invalid joins references %s", j.ParentName)
 		}

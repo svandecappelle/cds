@@ -93,7 +93,7 @@ export class WorkflowWNodeComponent implements OnInit {
         }
 
          let url = this._router.createUrlTree(['./'], { relativeTo: this._activatedRoute,
-            queryParams: { 'node_id': this.node.id, 'node_ref': this.node.ref}});
+            queryParams: { 'node_id': this.node.id, 'node_ref': this.node.name}});
         this._router.navigateByUrl(url.toString()).then(() => {});
     }
 
@@ -108,7 +108,7 @@ export class WorkflowWNodeComponent implements OnInit {
                     this._router.navigate([
                         '/project', this.project.key,
                         'pipeline', Workflow.getPipeline(this.workflow, this.node).name
-                    ], {queryParams: {workflow: this.workflow.name, node_id: this.node.id, node_ref: this.node.ref}});
+                    ], {queryParams: {workflow: this.workflow.name, node_id: this.node.id, node_ref: this.node.name}});
                     break;
                 }
         }

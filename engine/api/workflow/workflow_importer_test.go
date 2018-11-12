@@ -106,7 +106,6 @@ func TestImport(t *testing.T) {
 					WorkflowData: &sdk.WorkflowData{
 						Node: sdk.Node{
 							Name: "pipeline",
-							Ref:  "pipeline",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -126,7 +125,6 @@ func TestImport(t *testing.T) {
 					WorkflowData: &sdk.WorkflowData{
 						Node: sdk.Node{
 							Name: "pipeline",
-							Ref:  "pipeline",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -146,7 +144,6 @@ func TestImport(t *testing.T) {
 					WorkflowData: &sdk.WorkflowData{
 						Node: sdk.Node{
 							Name: "pipeline",
-							Ref:  "pipeline",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -166,7 +163,6 @@ func TestImport(t *testing.T) {
 					WorkflowData: &sdk.WorkflowData{
 						Node: sdk.Node{
 							Name: "pipeline",
-							Ref:  "pipeline",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID:    pip.ID,
@@ -188,7 +184,6 @@ func TestImport(t *testing.T) {
 					WorkflowData: &sdk.WorkflowData{
 						Node: sdk.Node{
 							Name: "pipeline",
-							Ref:  "pipeline",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -197,7 +192,6 @@ func TestImport(t *testing.T) {
 								{
 									ChildNode: sdk.Node{
 										Name: "child",
-										Ref:  "child",
 										Type: sdk.NodeTypePipeline,
 										Context: &sdk.NodeContext{
 											PipelineID: pip.ID,
@@ -220,7 +214,6 @@ func TestImport(t *testing.T) {
 					WorkflowData: &sdk.WorkflowData{
 						Node: sdk.Node{
 							Name: "pipeline",
-							Ref:  "pipeline",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -229,7 +222,6 @@ func TestImport(t *testing.T) {
 								{
 									ChildNode: sdk.Node{
 										Name: "child",
-										Ref:  "child",
 										Type: sdk.NodeTypePipeline,
 										Context: &sdk.NodeContext{
 											PipelineID: pip.ID,
@@ -239,7 +231,6 @@ func TestImport(t *testing.T) {
 								{
 									ChildNode: sdk.Node{
 										Name: "second-child",
-										Ref:  "second-child",
 										Type: sdk.NodeTypePipeline,
 										Context: &sdk.NodeContext{
 											PipelineID:    pip.ID,
@@ -263,7 +254,6 @@ func TestImport(t *testing.T) {
 					WorkflowData: &sdk.WorkflowData{
 						Node: sdk.Node{
 							Name: "A",
-							Ref:  "A",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -272,7 +262,6 @@ func TestImport(t *testing.T) {
 								{
 									ChildNode: sdk.Node{
 										Name: "B",
-										Ref:  "B",
 										Type: sdk.NodeTypePipeline,
 										Context: &sdk.NodeContext{
 											PipelineID: pip.ID,
@@ -282,7 +271,6 @@ func TestImport(t *testing.T) {
 								{
 									ChildNode: sdk.Node{
 										Name: "C",
-										Ref:  "C",
 										Type: sdk.NodeTypePipeline,
 										Context: &sdk.NodeContext{
 											PipelineID: pip.ID,
@@ -313,7 +301,6 @@ func TestImport(t *testing.T) {
 						Joins: []sdk.Node{
 							{
 								Name: "join1",
-								Ref:  "join1",
 								Type: sdk.NodeTypeJoin,
 								JoinContext: []sdk.NodeJoin{
 									{
@@ -327,7 +314,6 @@ func TestImport(t *testing.T) {
 									{
 										ChildNode: sdk.Node{
 											Name: "D",
-											Ref:  "D",
 											Type: sdk.NodeTypePipeline,
 											Context: &sdk.NodeContext{
 												PipelineID: pip.ID,
@@ -337,7 +323,6 @@ func TestImport(t *testing.T) {
 									{
 										ChildNode: sdk.Node{
 											Name: "E",
-											Ref:  "E",
 											Type: sdk.NodeTypePipeline,
 											Context: &sdk.NodeContext{
 												PipelineID: pip.ID,
@@ -347,7 +332,6 @@ func TestImport(t *testing.T) {
 									{
 										ChildNode: sdk.Node{
 											Name: "F",
-											Ref:  "F",
 											Type: sdk.NodeTypePipeline,
 											Context: &sdk.NodeContext{
 												PipelineID: pip.ID,
@@ -358,7 +342,6 @@ func TestImport(t *testing.T) {
 							},
 							{
 								Name: "join2",
-								Ref:  "join2",
 								Type: sdk.NodeTypeJoin,
 								JoinContext: []sdk.NodeJoin{
 									{
@@ -372,7 +355,6 @@ func TestImport(t *testing.T) {
 									{
 										ChildNode: sdk.Node{
 											Name: "G",
-											Ref:  "G",
 											Type: sdk.NodeTypePipeline,
 											Context: &sdk.NodeContext{
 												PipelineID: pip.ID,
@@ -395,7 +377,6 @@ func TestImport(t *testing.T) {
 					WorkflowData: &sdk.WorkflowData{
 						Node: sdk.Node{
 							Name: "pipeline",
-							Ref:  "pipeline",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID:    99,
@@ -417,7 +398,6 @@ func TestImport(t *testing.T) {
 					WorkflowData: &sdk.WorkflowData{
 						Node: sdk.Node{
 							Name: "pipeline",
-							Ref:  "pipeline",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pipparam.ID,
@@ -443,7 +423,6 @@ func TestImport(t *testing.T) {
 					WorkflowData: &sdk.WorkflowData{
 						Node: sdk.Node{
 							Name: "pipeline",
-							Ref:  "pipeline",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,

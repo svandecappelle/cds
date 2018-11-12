@@ -173,7 +173,7 @@ export class WorkflowWNodeSidebarEditComponent implements OnInit {
         let t = new WNodeTrigger();
         t.child_node = fork;
         t.parent_node_id = n.id;
-        t.parent_node_name = n.ref;
+        t.parent_node_name = n.name;
         n.triggers.push(t);
         this.updateWorkflow(clonedWorkflow, null);
     }
@@ -185,7 +185,7 @@ export class WorkflowWNodeSidebarEditComponent implements OnInit {
         join.parents = new Array<WNodeJoin>();
         let p = new WNodeJoin();
         p.parent_id = this.node.id;
-        p.parent_name = this.node.ref;
+        p.parent_name = this.node.name;
         join.parents.push(p);
 
         if (!clonedWorkflow.workflow_data.joins) {

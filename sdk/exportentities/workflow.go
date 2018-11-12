@@ -82,7 +82,7 @@ func craftNodeEntry(w sdk.Workflow, n sdk.Node) (NodeEntry, error) {
 
 				if node.Type == sdk.NodeTypeJoin {
 					for _, jp := range node.JoinContext {
-						parentNode := w.WorkflowData.NodeByRef(jp.ParentName)
+						parentNode := w.WorkflowData.NodeByName(jp.ParentName)
 						if parentNode == nil {
 							return entry, sdk.WithStack(sdk.ErrWorkflowNodeNotFound)
 						}
@@ -476,7 +476,6 @@ func (w Workflow) GetWorkflow() (*sdk.Workflow, error) {
 func (e *NodeEntry) getNode(name string, w *sdk.Workflow) (*sdk.Node, error) {
 	node := &sdk.Node{
 		Name: name,
-		Ref:  name,
 		Type: sdk.NodeTypeFork,
 		Context: &sdk.NodeContext{
 			PipelineName:        e.PipelineName,
@@ -665,7 +664,6 @@ func (e *NodeEntry) processNodeAncestors(name string, w *sdk.Workflow) (bool, er
 		}
 
 		if joinFound {
-			j.Ref = fmt.Sprintf("fakeRef%d", e.ID)
 			join = j
 		}
 	}
@@ -681,7 +679,6 @@ func (e *NodeEntry) processNodeAncestors(name string, w *sdk.Workflow) (bool, er
 		join = &sdk.Node{
 			JoinContext: joinContext,
 			Type:        sdk.NodeTypeJoin,
-			Ref:         fmt.Sprintf("fakeRef%d", e.ID),
 		}
 		appendJoin = true
 	}

@@ -60,7 +60,6 @@ func TestInsertSimpleWorkflowAndExport(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -124,7 +123,6 @@ func TestInsertSimpleWorkflowWithWrongName(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "root",
-				Ref:  "root",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -178,7 +176,6 @@ func TestInsertSimpleWorkflowWithApplicationAndEnv(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID:    pip.ID,
@@ -257,7 +254,6 @@ func TestInsertComplexeWorkflowAndExport(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "Root",
-				Ref:  "root",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip1.ID,
@@ -266,7 +262,6 @@ func TestInsertComplexeWorkflowAndExport(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "First",
-							Ref:  "first",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip2.ID,
@@ -284,7 +279,6 @@ func TestInsertComplexeWorkflowAndExport(t *testing.T) {
 								{
 									ChildNode: sdk.Node{
 										Name: "Second",
-										Ref:  "second",
 										Type: sdk.NodeTypePipeline,
 										Context: &sdk.NodeContext{
 											PipelineID: pip3.ID,
@@ -306,7 +300,6 @@ func TestInsertComplexeWorkflowAndExport(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "Last",
-							Ref:  "last",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip4.ID,
@@ -476,7 +469,7 @@ func TestInsertComplexeWorkflowWithBadOperator(t *testing.T) {
 }
 
 func assertEqualNode(t *testing.T, n1, n2 *sdk.WorkflowNode) {
-	t.Logf("assertEqualNode : %d(%s) on %s", n2.ID, n2.Ref, n2.PipelineName)
+	t.Logf("assertEqualNode : %d on %s", n2.ID, n2.PipelineName)
 	workflow.SortNode(n1)
 	workflow.SortNode(n2)
 	t.Logf("assertEqualNode : Checking hooks")
@@ -575,7 +568,6 @@ func TestUpdateSimpleWorkflowWithApplicationEnvPipelineParametersAndPayload(t *t
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID:    pip.ID,
@@ -600,7 +592,6 @@ func TestUpdateSimpleWorkflowWithApplicationEnvPipelineParametersAndPayload(t *t
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Context: &sdk.NodeContext{
 								PipelineID: pip3.ID,
 							},
@@ -755,7 +746,6 @@ func TestInsertComplexeWorkflowWithJoinsAndExport(t *testing.T) {
 							Triggers: []sdk.NodeTrigger{
 								{
 									ChildNode: sdk.Node{
-										Ref:  "pip3",
 										Type: sdk.NodeTypePipeline,
 										Context: &sdk.NodeContext{
 											PipelineID: pip3.ID,
@@ -771,7 +761,6 @@ func TestInsertComplexeWorkflowWithJoinsAndExport(t *testing.T) {
 										},
 										Triggers: []sdk.NodeTrigger{{
 											ChildNode: sdk.Node{
-												Ref:  "pip4",
 												Type: sdk.NodeTypePipeline,
 												Context: &sdk.NodeContext{
 													PipelineID: pip4.ID,
@@ -962,7 +951,6 @@ func TestInsertComplexeWorkflowWithComplexeJoins(t *testing.T) {
 							Triggers: []sdk.NodeTrigger{
 								{
 									ChildNode: sdk.Node{
-										Ref:  "pip3",
 										Type: sdk.NodeTypePipeline,
 										Context: &sdk.NodeContext{
 											PipelineID: pip3.ID,
@@ -979,7 +967,6 @@ func TestInsertComplexeWorkflowWithComplexeJoins(t *testing.T) {
 										Triggers: []sdk.NodeTrigger{
 											{
 												ChildNode: sdk.Node{
-													Ref:  "pip4",
 													Type: sdk.NodeTypePipeline,
 													Context: &sdk.NodeContext{
 														PipelineID: pip4.ID,
@@ -1017,7 +1004,6 @@ func TestInsertComplexeWorkflowWithComplexeJoins(t *testing.T) {
 					Triggers: []sdk.NodeTrigger{
 						{
 							ChildNode: sdk.Node{
-								Ref:  "pip5",
 								Type: sdk.NodeTypePipeline,
 								Context: &sdk.NodeContext{
 									PipelineID: pip5.ID,
@@ -1035,7 +1021,6 @@ func TestInsertComplexeWorkflowWithComplexeJoins(t *testing.T) {
 						},
 						{
 							ChildNode: sdk.Node{
-								Ref:  "pip6",
 								Type: sdk.NodeTypePipeline,
 								Context: &sdk.NodeContext{
 									PipelineID: pip6.ID,

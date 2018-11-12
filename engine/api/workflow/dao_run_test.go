@@ -95,7 +95,6 @@ func TestPurgeWorkflowRun(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -104,7 +103,6 @@ func TestPurgeWorkflowRun(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -188,7 +186,6 @@ func TestPurgeWorkflowRunWithRunningStatus(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -197,7 +194,6 @@ func TestPurgeWorkflowRunWithRunningStatus(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -283,7 +279,6 @@ func TestPurgeWorkflowRunWithOneSuccessWorkflowRun(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -292,7 +287,6 @@ func TestPurgeWorkflowRunWithOneSuccessWorkflowRun(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -391,7 +385,6 @@ func TestPurgeWorkflowRunWithNoSuccessWorkflowRun(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -400,7 +393,6 @@ func TestPurgeWorkflowRunWithNoSuccessWorkflowRun(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -486,7 +478,6 @@ func TestPurgeWorkflowRunWithoutTags(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -495,7 +486,6 @@ func TestPurgeWorkflowRunWithoutTags(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -576,7 +566,6 @@ func TestPurgeWorkflowRunWithoutTagsBiggerHistoryLength(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -585,7 +574,6 @@ func TestPurgeWorkflowRunWithoutTagsBiggerHistoryLength(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,

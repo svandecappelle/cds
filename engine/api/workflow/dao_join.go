@@ -74,7 +74,6 @@ func loadJoin(ctx context.Context, db gorp.SqlExecutor, store cache.Store, proj 
 		}
 		j.Triggers = append(j.Triggers, *jt)
 	}
-	j.Ref = fmt.Sprintf("%d", j.ID)
 
 	return &j, nil
 }
@@ -102,10 +101,10 @@ func loadJoinTrigger(ctx context.Context, db gorp.SqlExecutor, store cache.Store
 	return &t, nil
 }
 
-func findNodeByRef(ref string, nodes []sdk.WorkflowNode) *sdk.WorkflowNode {
+func findNodeByName(name string, nodes []sdk.WorkflowNode) *sdk.WorkflowNode {
 	for i := range nodes {
 		n := &nodes[i]
-		if n.Ref == ref {
+		if n.Name == name {
 			return n
 		}
 	}
@@ -125,7 +124,7 @@ func insertJoin(db gorp.SqlExecutor, store cache.Store, w *sdk.Workflow, n *sdk.
 	}
 
 	for _, s := range n.SourceNodeRefs {
-		foundRef := w.GetNodeByRef(s)
+		foundRef := w.GetNodeByName(s)
 		if foundRef == nil {
 			return sdk.WrapError(sdk.ErrWorkflowNodeRef, "insertOrUpdateJoin> Invalid joins references %s", s)
 		}
@@ -189,7 +188,7 @@ func insertJoinTrigger(db gorp.SqlExecutor, store cache.Store, w *sdk.Workflow, 
 
 	return nil
 }
- 
+
 func deleteJoin(db gorp.SqlExecutor, n sdk.WorkflowNodeJoin) error {
 	j := Join(n)
 	if _, err := db.Delete(&j); err != nil {

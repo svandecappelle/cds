@@ -253,6 +253,6 @@ export class WorkflowSidebarRunNodeComponent implements OnDestroy, OnInit {
       this._workflowEventStore.setSelectedRun(null);
       this._router.navigate(
           ['/project', this.project.key, 'workflow', this.workflow.name],
-          {queryParams: {'node_id': this.node.id, 'node_ref': this.node.ref}});
+          {queryParams: {'node_id': this.node.id, 'node_ref': this.node.name}});
     }
 }
