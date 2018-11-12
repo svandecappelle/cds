@@ -41,9 +41,6 @@ export class WorkflowNotificationFormComponent {
         if (data) {
             this._workflow = data;
             this.nodes = Workflow.getAllNodes(data);
-            this.nodes.map(node => {
-                let n = node;
-            });
             this.initNotif()
         }
     }

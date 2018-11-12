@@ -564,9 +564,6 @@ func (w *Workflow) processHooks(n *sdk.Node, wf *sdk.Workflow) {
 					Type:         hType,
 				}
 			}
-			if h.Ref == "" {
-				h.Ref = fmt.Sprintf("%d", time.Now().Unix())
-			}
 
 			n.Hooks = append(n.Hooks, sdk.NodeHook{
 				Config:        cfg,
@@ -592,11 +589,7 @@ func (e *NodeEntry) processNode(name string, w *sdk.Workflow) (bool, error) {
 		return false, err
 	}
 
-	if exist {
-		return true, nil
-	}
-
-	return false, nil
+	return exist, nil
 }
 
 func (e *NodeEntry) processNodeAncestors(name string, w *sdk.Workflow) (bool, error) {
