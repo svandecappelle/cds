@@ -82,7 +82,6 @@ func TestManualRun1(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -91,7 +90,6 @@ func TestManualRun1(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -227,7 +225,6 @@ func TestManualRun2(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -236,7 +233,6 @@ func TestManualRun2(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -372,7 +368,6 @@ func TestManualRun3(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -381,7 +376,6 @@ func TestManualRun3(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip2.ID,
@@ -685,7 +679,6 @@ func TestNoStage(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -694,7 +687,6 @@ func TestNoStage(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,
@@ -756,7 +748,6 @@ func TestNoJob(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -765,7 +756,6 @@ func TestNoJob(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID: pip.ID,

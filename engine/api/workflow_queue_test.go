@@ -92,7 +92,6 @@ func testRunWorkflow(t *testing.T, api *API, router *Router, db *gorp.DbMap) tes
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -816,7 +815,6 @@ func TestPostVulnerabilityReportHandler(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID:    pip.ID,
@@ -961,7 +959,6 @@ func TestInsertNewCodeCoverageReport(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID:    pip.ID,

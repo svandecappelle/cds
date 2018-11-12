@@ -99,7 +99,6 @@ func TestPull(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "node1",
-				Ref:  "node1",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,
@@ -108,7 +107,6 @@ func TestPull(t *testing.T) {
 					{
 						ChildNode: sdk.Node{
 							Name: "node2",
-							Ref:  "node2",
 							Type: sdk.NodeTypePipeline,
 							Context: &sdk.NodeContext{
 								PipelineID:    pip2.ID,

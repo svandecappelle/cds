@@ -68,14 +68,14 @@ export class Workflow {
         return null;
     }
 
-    static getNodeByRef(ref: string, w: Workflow): WNode {
-        let node = WNode.getNodeByRef(w.workflow_data.node, ref);
+    static getNodeByName(name: string, w: Workflow): WNode {
+        let node = WNode.getNodeByName(w.workflow_data.node, name);
         if (node) {
             return node;
         }
         if (w.workflow_data.joins) {
             for (let i = 0; i < w.workflow_data.joins.length; i++) {
-                let n = WNode.getNodeByRef(w.workflow_data.joins[i], ref);
+                let n = WNode.getNodeByName(w.workflow_data.joins[i], name);
                 if (n) {
                     return n;
                 }
@@ -174,7 +174,7 @@ export class Workflow {
             for (let i = 0; i < workflow.notifications.length; i++) {
                 if (workflow.notifications[i].source_node_ref) {
                     for (let j = 0; j < workflow.notifications[i].source_node_ref.length; j++) {
-                        if (-1 === nodes.findIndex(n => n.ref === workflow.notifications[i].source_node_ref[j])) {
+                        if (-1 === nodes.findIndex(n => n.name === workflow.notifications[i].source_node_ref[j])) {
                             workflow.notifications[i].source_node_ref.splice(j, 1);
                             j--;
                         }
@@ -219,13 +219,13 @@ export class Workflow {
         return nodes;
     }
 
-    static getMapNodesRef(data: Workflow): Map<string, WNode> {
+    static getMapNodesName(data: Workflow): Map<string, WNode> {
         let nodes = new Map<string, WNode>();
-        nodes = WNode.getMapNodesRef(nodes, data.workflow_data.node);
+        nodes = WNode.getMapNodesName(nodes, data.workflow_data.node);
 
         if (data.workflow_data.joins) {
             data.workflow_data.joins.forEach(j => {
-                nodes = WNode.getMapNodesRef(nodes, j);
+                nodes = WNode.getMapNodesName(nodes, j);
             });
         }
         return nodes;
@@ -429,7 +429,6 @@ export class WNode {
     id: number;
     workflow_id: number;
     name: string;
-    ref: string;
     type: string;
     triggers: Array<WNodeTrigger>;
     context: WNodeContext;
@@ -447,11 +446,11 @@ export class WNode {
         return nodes;
     }
 
-    static getMapNodesRef(nodes: Map<string, WNode>, node: WNode): Map<string, WNode> {
-        nodes.set(node.ref, node);
+    static getMapNodesName(nodes: Map<string, WNode>, node: WNode): Map<string, WNode> {
+        nodes.set(node.name, node);
         if (node.triggers) {
             node.triggers.forEach(t => {
-               nodes = WNode.getMapNodesRef(nodes, t.child_node);
+               nodes = WNode.getMapNodesName(nodes, t.child_node);
             });
         }
         return nodes;
@@ -476,13 +475,13 @@ export class WNode {
         return null;
     }
 
-    static getNodeByRef(node: WNode, ref: string): WNode {
-        if (node.ref === ref) {
+    static getNodeByName(node: WNode, name: string): WNode {
+        if (node.name === name) {
             return node;
         }
         if (node.triggers) {
             for (let i = 0; i < node.triggers.length; i++) {
-                let n = WNode.getNodeByRef(node.triggers[i].child_node, ref);
+                let n = WNode.getNodeByName(node.triggers[i].child_node, name);
                 if (n) {
                     return n;
                 }
@@ -547,7 +546,7 @@ export class WNode {
                            let already = j.parents.findIndex( p => p.parent_id === parentNode.id);
                            if (j.parents[i].parent_id === node.id && already === -1) {
                                j.parents[i].parent_id = parentNode.id;
-                               j.parents[i].parent_name = parentNode.ref;
+                               j.parents[i].parent_name = parentNode.name;
                                break;
                            }
                        }

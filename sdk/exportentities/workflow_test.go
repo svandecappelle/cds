@@ -2,7 +2,6 @@ package exportentities
 
 import (
 	"sort"
-	"strings"
 	"testing"
 
 	"github.com/fsamin/go-dump"
@@ -300,7 +299,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 							{
 								ChildNode: sdk.Node{
 									Name: "child",
-									Ref:  "child",
 									Type: "pipeline",
 									Context: &sdk.NodeContext{
 										PipelineName: "pipeline-child",
@@ -333,7 +331,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 				WorkflowData: &sdk.WorkflowData{
 					Node: sdk.Node{
 						Name: "root",
-						Ref:  "root",
 						Type: "pipeline",
 						Context: &sdk.NodeContext{
 							PipelineName: "pipeline-root",
@@ -342,7 +339,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 							{
 								ChildNode: sdk.Node{
 									Name: "child",
-									Ref:  "child",
 									Type: "pipeline",
 									Context: &sdk.NodeContext{
 										PipelineName: "pipeline-child",
@@ -378,7 +374,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 				WorkflowData: &sdk.WorkflowData{
 					Node: sdk.Node{
 						Name: "root",
-						Ref:  "root",
 						Type: "pipeline",
 						Context: &sdk.NodeContext{
 							PipelineName: "pipeline-root",
@@ -387,7 +382,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 							{
 								ChildNode: sdk.Node{
 									Name: "first",
-									Ref:  "first",
 									Type: "pipeline",
 									Context: &sdk.NodeContext{
 										PipelineName: "pipeline-child",
@@ -397,7 +391,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 										{
 											ChildNode: sdk.Node{
 												Name: "second",
-												Ref:  "second",
 												Type: "pipeline",
 												Context: &sdk.NodeContext{
 													PipelineName: "pipeline-child",
@@ -464,7 +457,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 				WorkflowData: &sdk.WorkflowData{
 					Node: sdk.Node{
 						Name: "A",
-						Ref:  "A",
 						Type: "pipeline",
 						Context: &sdk.NodeContext{
 							PipelineName: "pipeline",
@@ -473,7 +465,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 							{
 								ChildNode: sdk.Node{
 									Name: "B",
-									Ref:  "B",
 									Type: "pipeline",
 									Context: &sdk.NodeContext{
 										PipelineName: "pipeline",
@@ -483,7 +474,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 							{
 								ChildNode: sdk.Node{
 									Name: "C",
-									Ref:  "C",
 									Type: "pipeline",
 									Context: &sdk.NodeContext{
 										PipelineName: "pipeline",
@@ -524,7 +514,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 								{
 									ChildNode: sdk.Node{
 										Name: "D",
-										Ref:  "D",
 										Type: "pipeline",
 										Context: &sdk.NodeContext{
 											PipelineName: "pipeline",
@@ -534,7 +523,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 								{
 									ChildNode: sdk.Node{
 										Name: "E",
-										Ref:  "E",
 										Type: "pipeline",
 										Context: &sdk.NodeContext{
 											PipelineName: "pipeline",
@@ -544,7 +532,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 								{
 									ChildNode: sdk.Node{
 										Name: "F",
-										Ref:  "F",
 										Type: "pipeline",
 										Context: &sdk.NodeContext{
 											PipelineName: "pipeline",
@@ -567,7 +554,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 								{
 									ChildNode: sdk.Node{
 										Name: "G",
-										Ref:  "G",
 										Type: "pipeline",
 										Context: &sdk.NodeContext{
 											PipelineName: "pipeline",
@@ -591,7 +577,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 				WorkflowData: &sdk.WorkflowData{
 					Node: sdk.Node{
 						Name: "pipeline",
-						Ref:  "pipeline",
 						Type: "pipeline",
 						Context: &sdk.NodeContext{
 							PipelineName:        "pipeline",
@@ -622,7 +607,6 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 				WorkflowData: &sdk.WorkflowData{
 					Node: sdk.Node{
 						Name: "A",
-						Ref:  "pipeline",
 						Type: "pipeline",
 						Context: &sdk.NodeContext{
 							PipelineName: "pipeline",
@@ -694,12 +678,8 @@ func TestWorkflow_GetWorkflow(t *testing.T) {
 			for _, expectedKey := range keysExpextedValues {
 				expectedValue := expextedValues[expectedKey]
 				actualValue, ok := actualValues[expectedKey]
-				if strings.Contains(expectedKey, ".Ref") {
-					assert.NotEmpty(t, actualValue, "value %s is empty but shoud not be empty", expectedKey)
-				} else {
-					assert.True(t, ok, "%s not found", expectedKey)
-					assert.Equal(t, expectedValue, actualValue, "value %s doesn't match. Got %s but want %s", expectedKey, actualValue, expectedValue)
-				}
+				assert.True(t, ok, "%s not found", expectedKey)
+				assert.Equal(t, expectedValue, actualValue, "value %s doesn't match. Got %s but want %s", expectedKey, actualValue, expectedValue)
 			}
 
 			for actualKey := range actualValues {

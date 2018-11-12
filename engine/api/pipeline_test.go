@@ -61,7 +61,7 @@ func Test_runPipelineHandler(t *testing.T) {
 
 	//7. Prepare the route
 	vars := map[string]string{
-		"key": proj.Key,
+		"key":                 proj.Key,
 		"permApplicationName": app.Name,
 		"permPipelineKey":     pip.Name,
 	}
@@ -137,7 +137,7 @@ func Test_runPipelineWithLastParentHandler(t *testing.T) {
 
 	//7. Prepare the route
 	vars := map[string]string{
-		"key": proj.Key,
+		"key":                 proj.Key,
 		"permApplicationName": app.Name,
 		"permPipelineKey":     pip.Name,
 	}
@@ -228,7 +228,7 @@ func Test_runPipelineWithLastParentHandler(t *testing.T) {
 
 	//16. Prepare the route
 	vars = map[string]string{
-		"key": proj.Key,
+		"key":                 proj.Key,
 		"permApplicationName": app2.Name,
 		"permPipelineKey":     pip2.Name,
 	}
@@ -417,7 +417,6 @@ func Test_deletePipelineHandlerShouldReturnError(t *testing.T) {
 		WorkflowData: &sdk.WorkflowData{
 			Node: sdk.Node{
 				Name: "root",
-				Ref:  "root",
 				Type: sdk.NodeTypePipeline,
 				Context: &sdk.NodeContext{
 					PipelineID: pip.ID,

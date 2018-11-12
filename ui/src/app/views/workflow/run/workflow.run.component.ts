@@ -124,7 +124,7 @@ export class WorkflowRunComponent implements OnInit {
             }
         }
         if (this.selectedNodeRef) {
-            let n = Workflow.getNodeByRef(this.selectedNodeRef, this.workflowRun.workflow);
+            let n = Workflow.getNodeByName(this.selectedNodeRef, this.workflowRun.workflow);
             if (n) {
                 this._workflowEventStore.setSelectedNode(n, false);
                 let nr: WorkflowNodeRun;

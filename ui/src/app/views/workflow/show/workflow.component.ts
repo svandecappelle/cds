@@ -146,7 +146,7 @@ export class WorkflowShowComponent implements OnInit {
             }
         }
         if (this.selectedNodeRef) {
-            let n = Workflow.getNodeByRef(this.selectedNodeRef, this.detailedWorkflow);
+            let n = Workflow.getNodeByName(this.selectedNodeRef, this.detailedWorkflow);
             if (n) {
                 this.selectedNode = n;
                 this._workflowEventStore.setSelectedNode(n, true);

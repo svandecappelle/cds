@@ -80,7 +80,7 @@ export class WorkflowTriggerComponent {
                 n.triggers = new Array<WNodeTrigger>();
             }
             let newTrigger = new WNodeTrigger();
-            newTrigger.parent_node_name = n.ref;
+            newTrigger.parent_node_name = n.name;
             newTrigger.child_node = this.destNode;
             n.triggers.push(newTrigger);
             this.triggerEvent.emit(clonedWorkflow);
