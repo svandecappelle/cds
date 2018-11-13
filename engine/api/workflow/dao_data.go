@@ -68,7 +68,7 @@ func InsertWorkflowData(db gorp.SqlExecutor, w *sdk.Workflow) error {
 }
 
 func insertNodeData(db gorp.SqlExecutor, w *sdk.Workflow, n *sdk.Node, skipDependencies bool) error {
-	log.Debug("insertNodeData> insert node %s %d (%s)", n.Name, n.ID, n.Ref)
+	log.Debug("insertNodeData> insert node %s %d", n.Name, n.ID)
 
 	if !nodeNamePattern.MatchString(n.Name) {
 		return sdk.WrapError(sdk.ErrInvalidNodeNamePattern, "insertNodeData> node has a wrong name %s", n.Name)
@@ -79,7 +79,7 @@ func insertNodeData(db gorp.SqlExecutor, w *sdk.Workflow, n *sdk.Node, skipDepen
 	//Insert new node
 	dbwn := dbNodeData(*n)
 	if err := db.Insert(&dbwn); err != nil {
-		return sdk.WrapError(err, "insertNodeData> Unable to insert workflow node %s-%s", n.Name, n.Ref)
+		return sdk.WrapError(err, "insertNodeData> Unable to insert workflow node %s", n.Name)
 	}
 	n.ID = dbwn.ID
 
@@ -92,19 +92,19 @@ func insertNodeData(db gorp.SqlExecutor, w *sdk.Workflow, n *sdk.Node, skipDepen
 	}
 
 	if err := insertNodeContextData(db, w, n); err != nil {
-		return sdk.WrapError(err, "insertNodeData> Unable to insertNodeContextData %s-%s", n.Name, n.Ref)
+		return sdk.WrapError(err, "insertNodeData> Unable to insertNodeContextData %s", n.Name)
 	}
 
 	if err := insertNodeHookData(db, w, n); err != nil {
-		return sdk.WrapError(err, "insertNodeData> Unable to insertNodeHookData %s-%s", n.Name, n.Ref)
+		return sdk.WrapError(err, "insertNodeData> Unable to insertNodeHookData %s", n.Name)
 	}
 
 	if err := insertNodeOutGoingHookData(db, w, n); err != nil {
-		return sdk.WrapError(err, "insertNodeData> Unable to insertNodeOutGoingHook %s-%s", n.Name, n.Ref)
+		return sdk.WrapError(err, "insertNodeData> Unable to insertNodeOutGoingHook %s", n.Name)
 	}
 
 	if err := insertNodeTriggerData(db, w, n); err != nil {
-		return sdk.WrapError(err, "insertNodeData> Unable to insertNodeTriggerData %s-%s", n.Name, n.Ref)
+		return sdk.WrapError(err, "insertNodeData> Unable to insertNodeTriggerData %s", n.Name)
 	}
 
 	return nil

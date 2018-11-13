@@ -160,10 +160,7 @@ func (r *Run) PostGet(db gorp.SqlExecutor) error {
 	if err := gorpmapping.JSONNullString(res.W, &w); err != nil {
 		return sdk.WrapError(err, "Unable to unmarshal workflow")
 	}
-	// TODO: to delete when old runs will be purged
-	for i := range w.Joins {
-		w.Joins[i].Ref = fmt.Sprintf("%d", w.Joins[i].ID)
-	}
+
 	// This is usefull for oldserialized workflows...
 	//TODO: delete this after a while
 	if len(w.Pipelines) == 0 {

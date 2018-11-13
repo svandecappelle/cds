@@ -186,25 +186,6 @@ func (w *Workflow) AddTrigger(name string, dest Node) {
 	}
 }
 
-//GetNodeByRef returns the node given its ref
-func (w *Workflow) GetNodeByRef(ref string) *WorkflowNode {
-	n := w.Root.GetNodeByRef(ref)
-	if n != nil {
-		return n
-	}
-	for ji := range w.Joins {
-		j := &w.Joins[ji]
-		for ti := range j.Triggers {
-			t := &j.Triggers[ti]
-			n2 := (&t.WorkflowDestNode).GetNodeByRef(ref)
-			if n2 != nil {
-				return n2
-			}
-		}
-	}
-	return nil
-}
-
 func (w *Workflow) GetForkByName(name string) *WorkflowNodeFork {
 	n := w.Root.GetForkByName(name)
 	if n != nil {
@@ -579,7 +560,6 @@ func (n *WorkflowNode) Sort() {
 //WorkflowNodeJoin aims to joins multiple node into multiple triggers
 type WorkflowNodeJoin struct {
 	ID             int64                     `json:"id" db:"id"`
-	Ref            string                    `json:"ref" db:"-"`
 	WorkflowID     int64                     `json:"workflow_id" db:"workflow_id"`
 	SourceNodeIDs  []int64                   `json:"source_node_id,omitempty" db:"-"`
 	SourceNodeRefs []string                  `json:"source_node_ref,omitempty" db:"-"`
@@ -588,8 +568,7 @@ type WorkflowNodeJoin struct {
 
 func (j WorkflowNodeJoin) migrate(withID bool) Node {
 	newNode := Node{
-		Name:        j.Ref,
-		Ref:         j.Ref,
+		Name:        RandomString(10),
 		Type:        NodeTypeJoin,
 		JoinContext: make([]NodeJoin, 0, len(j.SourceNodeIDs)),
 		Triggers:    make([]NodeTrigger, 0, len(j.Triggers)),
@@ -629,7 +608,6 @@ type WorkflowNodeJoinTrigger struct {
 type WorkflowNode struct {
 	ID                 int64                      `json:"id" db:"id"`
 	Name               string                     `json:"name" db:"name"`
-	Ref                string                     `json:"ref,omitempty" db:"-"`
 	WorkflowID         int64                      `json:"workflow_id" db:"workflow_id"`
 	PipelineID         int64                      `json:"pipeline_id" db:"pipeline_id"`
 	PipelineName       string                     `json:"pipeline_name" db:"-"`
@@ -647,7 +625,6 @@ type WorkflowNode struct {
 
 func (n Node) retroMigrate() WorkflowNode {
 	newNode := WorkflowNode{
-		Ref:        n.Ref,
 		Name:       n.Name,
 		WorkflowID: n.WorkflowID,
 		Context: &WorkflowNodeContext{
@@ -716,7 +693,6 @@ func (n Node) retroMigrateOutGoingHook() WorkflowNodeOutgoingHook {
 	h := WorkflowNodeOutgoingHook{
 		Config:              n.OutGoingHookContext.Config,
 		WorkflowHookModelID: n.OutGoingHookContext.HookModelID,
-		Ref:                 n.Ref,
 		Name:                n.Name,
 	}
 	if len(n.Triggers) > 0 {
@@ -736,9 +712,7 @@ func (n Node) retroMigrateOutGoingHook() WorkflowNodeOutgoingHook {
 }
 
 func (n Node) retroMigrateJoin() WorkflowNodeJoin {
-	j := WorkflowNodeJoin{
-		Ref: n.Ref,
-	}
+	j := WorkflowNodeJoin{}
 
 	j.SourceNodeRefs = make([]string, 0, len(n.JoinContext))
 	for _, jc := range n.JoinContext {
@@ -767,7 +741,6 @@ func (n WorkflowNode) migrate(withID bool) Node {
 		WorkflowID: n.WorkflowID,
 		Type:       NodeTypePipeline,
 		Name:       n.Name,
-		Ref:        n.Ref,
 		Context: &NodeContext{
 			PipelineID:                n.PipelineID,
 			ApplicationID:             n.Context.ApplicationID,
@@ -792,9 +765,6 @@ func (n WorkflowNode) migrate(withID bool) Node {
 	}
 	if withID {
 		newNode.ID = n.ID
-	}
-	if n.Ref == "" {
-		n.Ref = n.Name
 	}
 
 	for _, h := range n.Hooks {
@@ -923,41 +893,6 @@ func (n *WorkflowNode) EqualsTo(n1 *WorkflowNode) bool {
 		return false
 	}
 	return true
-}
-
-//GetNodeByRef returns the node given its ref
-func (n *WorkflowNode) GetNodeByRef(ref string) *WorkflowNode {
-	if n == nil {
-		return nil
-	}
-	if n.Ref == ref {
-		return n
-	}
-	for i := range n.Triggers {
-		t := &n.Triggers[i]
-		n2 := (&t.WorkflowDestNode).GetNodeByRef(ref)
-		if n2 != nil {
-			return n2
-		}
-	}
-	for i := range n.OutgoingHooks {
-		for j := range n.OutgoingHooks[i].Triggers {
-			n2 := (&n.OutgoingHooks[i].Triggers[j].WorkflowDestNode).GetNodeByRef(ref)
-			if n2 != nil {
-				return n2
-			}
-		}
-	}
-	for i := range n.Forks {
-		for j := range n.Forks[i].Triggers {
-			n2 := (&n.Forks[i].Triggers[j].WorkflowDestNode).GetNodeByRef(ref)
-			if n2 != nil {
-				return n2
-			}
-		}
-	}
-
-	return nil
 }
 
 func (n *WorkflowNode) GetForkByName(name string) *WorkflowNodeFork {
@@ -1207,11 +1142,11 @@ func (n *WorkflowNode) TriggersID() []int64 {
 	return res
 }
 
-//References returns a slice with all node references
+//References returns a slice with all node names
 func (n *WorkflowNode) References() []string {
 	res := []string{}
-	if n.Ref != "" {
-		res = []string{n.Ref}
+	if n.Name != "" {
+		res = []string{n.Name}
 	}
 	for _, t := range n.Triggers {
 		res = append(res, t.WorkflowDestNode.References()...)

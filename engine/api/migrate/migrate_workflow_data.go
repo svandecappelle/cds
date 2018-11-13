@@ -1,6 +1,7 @@
 package migrate
 
 import (
+	"context"
 	"github.com/go-gorp/gorp"
 
 	"github.com/ovh/cds/engine/api/cache"
@@ -20,7 +21,7 @@ func MigrateToWorkflowData(DBFunc func() *gorp.DbMap, store cache.Store) {
 	for {
 		db := DBFunc()
 		var IDs []int64
-		query := "SELECT id FROM workflow WHERE workflow_data IS NULL AND to_delete = false AND root_node_id is not null LIMIT 100"
+		query := "SELECT id FROM workflow WHERE workflow_data IS NOT NULL AND to_delete = false AND root_node_id is not null AND id= 745"
 		if _, err := db.Select(&IDs, query); err != nil {
 			log.Error("MigrateToWorkflowData> Unable to select workflows id: %v", err)
 			return
@@ -82,24 +83,19 @@ func migrateWorkflowData(db *gorp.DbMap, store cache.Store, ID int64) error {
 		return sdk.WrapError(err, "migrateWorkflowData> Unable to load workflow %d", ID)
 	}
 
-	if w.WorkflowData != nil {
-		return nil
+	oldW := *w
+
+	for i := range w.WorkflowData.Joins {
+		j := &w.WorkflowData.Joins[i]
+		for k := range j.JoinContext {
+			parentContext := &j.JoinContext[k]
+			n := w.WorkflowData.NodeByID(parentContext.NodeID)
+			parentContext.ParentName = n.Name
+		}
 	}
 
-	data := w.Migrate(false)
-	w.WorkflowData = &data
-
-	if err := workflow.RenameNode(tx, w); err != nil {
-		return sdk.WrapError(err, "Unable to rename node")
-	}
-
-	if err := workflow.InsertWorkflowData(tx, w); err != nil {
-		return sdk.WrapError(err, "migrateWorkflowData> Unable to insert Workflow Data")
-	}
-
-	dbWorkflow := workflow.Workflow(*w)
-	if err := dbWorkflow.PostUpdate(tx); err != nil {
-		return sdk.WrapError(err, "migrateWorkflowData> Unable to update workflow %d", ID)
+	if err := workflow.Update(context.Background(), tx, store, w, &oldW, p, nil); err != nil {
+		return sdk.WrapError(err, "migrateWorkflowData> Unable to update join for %d", ID)
 	}
 
 	return tx.Commit()

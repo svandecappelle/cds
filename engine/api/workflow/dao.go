@@ -453,7 +453,20 @@ func load(ctx context.Context, db gorp.SqlExecutor, store cache.Store, proj *sdk
 			if errJ != nil {
 				return nil, sdk.WrapError(errJ, "Load> Unable to load workflow joins")
 			}
+
 			res.Joins = joins
+
+			for i := range res.Joins {
+				j := &res.Joins[i]
+				refs := make([]string, 0, len(j.SourceNodeIDs))
+				for _, ID := range j.SourceNodeIDs {
+					parent := res.GetNode(ID)
+					if parent != nil {
+						refs = append(refs, parent.Name)
+					}
+				}
+				j.SourceNodeRefs = refs
+			}
 		}
 
 	}
@@ -585,7 +598,7 @@ func Insert(db gorp.SqlExecutor, store cache.Store, w *sdk.Workflow, p *sdk.Proj
 	nodes := w.Nodes(true)
 	for i := range w.Notifications {
 		n := &w.Notifications[i]
-		if err := insertNotification(db, store, w, n, nodes, u); err != nil {
+		if err := insertNotification(db, w, n, nodes, u); err != nil {
 			return sdk.WrapError(err, "Unable to insert update workflow(%d) notification (%#v)", w.ID, n)
 		}
 	}
@@ -717,10 +730,6 @@ func RenameNode(db gorp.SqlExecutor, w *sdk.Workflow) error {
 				}
 			}
 		}
-
-		if nodes[i].Ref == "" {
-			nodes[i].Ref = nodes[i].Name
-		}
 	}
 
 	// Name node
@@ -761,9 +770,6 @@ func RenameNode(db gorp.SqlExecutor, w *sdk.Workflow) error {
 			}
 			maxNumberByHookModel[hookModelID] = nextNumber
 		}
-		if nodesToNamed[i].Ref == "" {
-			nodesToNamed[i].Ref = nodesToNamed[i].Name
-		}
 	}
 
 	return nil
@@ -776,6 +782,9 @@ func Update(ctx context.Context, db gorp.SqlExecutor, store cache.Store, w *sdk.
 	}
 
 	// Delete all OLD JOIN
+	log.Warning("%+v", *oldWorkflow.Root)
+	log.Warning("%+v", oldWorkflow.Joins)
+	log.Warning("%+v", *oldWorkflow.WorkflowData)
 	for _, j := range oldWorkflow.Joins {
 		if err := deleteJoin(db, j); err != nil {
 			return sdk.WrapError(err, "unable to delete all joins on workflow(%d)", w.ID)
@@ -821,7 +830,7 @@ func Update(ctx context.Context, db gorp.SqlExecutor, store cache.Store, w *sdk.
 	nodes := w.Nodes(true)
 	for i := range w.Notifications {
 		n := &w.Notifications[i]
-		if err := insertNotification(db, store, w, n, nodes, u); err != nil {
+		if err := insertNotification(db, w, n, nodes, u); err != nil {
 			return sdk.WrapError(err, "Unable to update workflow(%d) notification (%#v)", w.ID, n)
 		}
 	}
@@ -939,17 +948,19 @@ func IsValid(ctx context.Context, store cache.Store, db gorp.SqlExecutor, w *sdk
 	for i, ref1 := range refs {
 		for j, ref2 := range refs {
 			if ref1 == ref2 && i != j {
-				return sdk.NewError(sdk.ErrWorkflowInvalid, fmt.Errorf("Duplicate reference %s", ref1))
+				return sdk.NewError(sdk.ErrWorkflowInvalid, fmt.Errorf("Duplicate node name %s", ref1))
 			}
 		}
 	}
 
 	//Check refs
-	for _, j := range w.Joins {
-		if len(j.SourceNodeRefs) == 0 {
-			return sdk.NewError(sdk.ErrWorkflowInvalid, fmt.Errorf("Source node references is mandatory"))
+	/*
+		for _, j := range w.Joins {
+			if len(j.SourceNodeRefs) == 0 {
+				return sdk.NewError(sdk.ErrWorkflowInvalid, fmt.Errorf("Source node references is mandatory"))
+			}
 		}
-	}
+	*/
 
 	if w.Pipelines == nil {
 		w.Pipelines = make(map[int64]sdk.Pipeline)

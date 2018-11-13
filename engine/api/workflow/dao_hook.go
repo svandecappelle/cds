@@ -359,7 +359,6 @@ func (h *nodeOutgoingHook) PostGet(db gorp.SqlExecutor) error {
 	}
 
 	h.WorkflowHookModel = *model
-	h.Ref = fmt.Sprintf("%d", h.ID)
 
 	return nil
 }

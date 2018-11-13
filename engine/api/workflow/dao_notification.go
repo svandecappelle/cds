@@ -5,7 +5,6 @@ import (
 
 	"github.com/go-gorp/gorp"
 
-	"github.com/ovh/cds/engine/api/cache"
 	"github.com/ovh/cds/engine/api/database/gorpmapping"
 	"github.com/ovh/cds/sdk"
 )
@@ -65,7 +64,7 @@ func loadNotification(db gorp.SqlExecutor, w *sdk.Workflow, id int64) (sdk.Workf
 	return n, nil
 }
 
-func insertNotification(db gorp.SqlExecutor, store cache.Store, w *sdk.Workflow, n *sdk.WorkflowNotification, nodes []sdk.WorkflowNode, u *sdk.User) error {
+func insertNotification(db gorp.SqlExecutor, w *sdk.Workflow, n *sdk.WorkflowNotification, nodes []sdk.WorkflowNode, u *sdk.User) error {
 	n.WorkflowID = w.ID
 	n.ID = 0
 	n.SourceNodeIDs = nil
@@ -78,7 +77,7 @@ func insertNotification(db gorp.SqlExecutor, store cache.Store, w *sdk.Workflow,
 
 	for _, s := range n.SourceNodeRefs {
 		//Search references
-		var foundRef = findNodeByRef(s, nodes)
+		var foundRef = findNodeByName(s, nodes)
 		if foundRef == nil || foundRef.ID == 0 {
 			return sdk.WrapError(sdk.ErrWorkflowNotificationNodeRef, "insertNotification> Invalid notification references %s", s)
 		}

@@ -164,19 +164,6 @@ func (n *Node) GetHooks() map[string]NodeHook {
 	return res
 }
 
-func (n *Node) nodeByRef(ref string) *Node {
-	if n.Ref == ref {
-		return n
-	}
-	for i := range n.Triggers {
-		node := (&n.Triggers[i].ChildNode).nodeByRef(ref)
-		if node != nil {
-			return node
-		}
-	}
-	return nil
-}
-
 func (n *Node) nodeByID(ID int64) *Node {
 	if n.ID == ID {
 		return n

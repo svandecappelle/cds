@@ -48,7 +48,7 @@ func updateWorkflowTriggerHookSrc(db gorp.SqlExecutor, n *sdk.WorkflowNode) erro
 }
 
 func insertNode(db gorp.SqlExecutor, store cache.Store, w *sdk.Workflow, n *sdk.WorkflowNode, u *sdk.User, skipDependencies bool) error {
-	log.Debug("insertNode> insert or update node %s %d (%s) on %d", n.Name, n.ID, n.Ref, n.PipelineID)
+	log.Debug("insertNode> insert or update node %s %d on %d", n.Name, n.ID, n.PipelineID)
 
 	if !nodeNamePattern.MatchString(n.Name) {
 		return sdk.WrapError(sdk.ErrInvalidNodeNamePattern, "insertNode> node has a wrong name %s", n.Name)
@@ -96,7 +96,7 @@ func insertNode(db gorp.SqlExecutor, store cache.Store, w *sdk.Workflow, n *sdk.
 		//Insert new node
 		dbwn := Node(*n)
 		if err := db.Insert(&dbwn); err != nil {
-			return sdk.WrapError(err, "Unable to insert workflow node %s-%s", n.Name, n.Ref)
+			return sdk.WrapError(err, "Unable to insert workflow node %s", n.Name)
 		}
 		n.ID = dbwn.ID
 	}
@@ -109,7 +109,7 @@ func insertNode(db gorp.SqlExecutor, store cache.Store, w *sdk.Workflow, n *sdk.
 	if !has {
 		loadedPip, err := pipeline.LoadPipelineByID(context.TODO(), db, n.PipelineID, true)
 		if err != nil {
-			return sdk.WrapError(err, "Unable to load pipeline for workflow node %s-%s", n.Name, n.Ref)
+			return sdk.WrapError(err, "Unable to load pipeline for workflow node %s", n.Name)
 		}
 		w.Pipelines[n.PipelineID] = *loadedPip
 		pip = *loadedPip
@@ -337,7 +337,6 @@ func loadNode(c context.Context, db gorp.SqlExecutor, store cache.Store, proj *s
 
 	wn := sdk.WorkflowNode(dbwn)
 	wn.WorkflowID = w.ID
-	wn.Ref = fmt.Sprintf("%d", dbwn.ID)
 
 	if !opts.OnlyRootNode {
 		//Load triggers
