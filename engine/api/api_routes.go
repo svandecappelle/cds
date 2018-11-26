@@ -18,7 +18,6 @@ func (api *API) InitRouter(ctx context.Context) {
 	api.Router.PostMiddlewares = append(api.Router.PostMiddlewares, api.deletePermissionMiddleware, TracingPostMiddleware)
 
 	r := api.Router
-	r.Handle("/login", r.POST(api.loginUserHandler, Auth(false)))
 
 	log.Info("Initializing Events broker")
 	// Initialize event broker
@@ -29,9 +28,8 @@ func (api *API) InitRouter(ctx context.Context) {
 		dbFunc:   api.DBConnectionFactory.GetDBMap,
 		messages: make(chan sdk.Event),
 	}
-	api.eventsBroker.Init(ctx)
+	api.eventsBroker.Init(ctx, api.PanicDump())
 
-	r := api.Router
 	r.Handle("/login", r.GET(api.getLoginUserHandler, Auth(false)), r.POST(api.postLoginUserHandler, Auth(false)))
 	r.Handle("/login/{driver}", r.GET(api.redirectToIdentityProvider, Auth(false)))
 	r.Handle("/request-token", r.POST(api.postRequestTokenHanler, Auth(false)))
