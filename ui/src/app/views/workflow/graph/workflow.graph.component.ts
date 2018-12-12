@@ -229,7 +229,7 @@ export class WorkflowGraphComponent implements AfterViewInit {
         node.hooks.forEach(h => {
             let hookId = h.uuid;
             let componentRef = this.hooksComponent.get(hookId);
-            if (!componentRef) {
+            if (!componentRef || componentRef.instance.hook.id !== h.id) {
                 let hookComponent = this.componentFactoryResolver.resolveComponentFactory(WorkflowNodeHookComponent);
                 componentRef = hookComponent.create(this.svgContainer.parentInjector);
 
